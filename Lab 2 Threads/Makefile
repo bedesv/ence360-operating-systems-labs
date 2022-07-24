@@ -22,7 +22,10 @@ semaphore: semaphore.c $(TEST_OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 thread: thread.c $(TEST_OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)	
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+lab-q1: lab-q1.c $(TEST_OBJ)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	
 
 clean:
