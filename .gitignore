@@ -6,3 +6,7 @@
 
 # Unignore all dirs
 !*/
+
+/.idea
+
+Lab 2 Threads/.idea/
