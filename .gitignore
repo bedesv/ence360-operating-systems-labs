@@ -8,5 +8,7 @@
 !*/
 
 /.idea
+*/.idea/
 
-Lab 2 Threads/.idea/
+*.nfs*
+
