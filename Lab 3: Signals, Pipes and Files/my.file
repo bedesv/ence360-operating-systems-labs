@@ -1,0 +1,14 @@
+total 614
+-rwx------ 1 bjs185 9200 17176 Aug  1 09:34 asyncWaiting
+-rw------- 1 bjs185 9200  2232 Aug  1 09:34 asyncWaiting.c
+-rwx------ 1 bjs185 9200 16872 Aug  1 09:49 dup2eg
+-rw------- 1 bjs185 9200   762 Jul 30  2017 dup2eg.c
+-rw------- 1 bjs185 9200   733 Aug  1 09:54 dup2sort.c
+-rw------- 1 bjs185 9200     0 Aug  1 09:54 my.file
+-rwx------ 1 bjs185 9200 17328 Aug  1 09:35 pipe
+-rw------- 1 bjs185 9200  1807 Jul 30  2017 pipe.c
+-rw------- 1 bjs185 9200   903 Jul 30  2017 pipedup2.c
+-rwx------ 1 bjs185 9200 17384 Aug  1 09:44 pipeToUpper
+-rw------- 1 bjs185 9200  2559 Aug  1 09:44 pipeToUpper.c
+-rwx------ 1 bjs185 9200 17184 Aug  1 09:27 waiting
+-rw------- 1 bjs185 9200  2284 Jul 30  2017 waiting.c

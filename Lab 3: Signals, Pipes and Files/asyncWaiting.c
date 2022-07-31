@@ -55,6 +55,7 @@ int main(int argc, const char * argv[]) {
         printf("\nPARENT: sending SIGQUIT\n\n");
         kill(child_pid, SIGQUIT);
 
+        sleep(3);
         printf("\nPARENT: doing something\n\n");
         sleep(3);
     }
