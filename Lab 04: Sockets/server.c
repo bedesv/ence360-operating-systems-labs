@@ -36,13 +36,15 @@ int listen_on(int port)
 
 int accept_connection(int s) {
 
-
+    struct sockaddr_in client_address;
     /////////////////////////////////////////////
     // TODO: Implement in terms of 'accept'
+    socklen_t socklen = sizeof(struct sockaddr_in);
+    int client_socket =  accept(s, (struct sockaddr *) &client_address, &socklen);
 
     /////////////////////////////////////////////  
 
-    return 0; // DELETE THIS !!
+    return client_socket;
 }
 
 
@@ -53,13 +55,30 @@ void handle_request(int msgsock) {
     char buffer[MAXDATASIZE];
     int num_read = 0;
 
-    //read a message from the client
-    num_read = read(msgsock, buffer, MAXDATASIZE - 1);
-    printf("read a message %d bytes: %s\n", num_read, buffer);
+//    //read a message from the client
+//    num_read = read(msgsock, buffer, MAXDATASIZE - 1);
+//    printf("read a message %d bytes: %s\n", num_read, buffer);
 
 
     // TODO: write a function to reply to all incoming messages
     // while the connection remains open
+    do {
+        memset(buffer, 0, MAXDATASIZE);
+        if ((num_read = read(msgsock, buffer, MAXDATASIZE - 1)) < 0) {
+            perror("network server read");
+            close(msgsock);
+            exit(7);
+        } else if (num_read == 0) { // Close if receives 0 bytes
+            printf("\nServer closing client connection\n");
+            close(msgsock);
+            continue; /* Break out of the loop */
+        } else { // respond to the message from the client
+            buffer[num_read] = '\0';
+            printf("read a message %d bytes: %s\n", num_read, buffer);
+            write(msgsock, buffer, num_read);
+        }
+
+    } while (num_read != 0);
 
     ///////////////////
 
@@ -71,7 +90,12 @@ void handle_request(int msgsock) {
 void handle_fork(int msgsock) {
 
     //TODO: run this line inside a forked child process
-    handle_request(msgsock);
+    if (fork() == 0) {
+        handle_request(msgsock);
+    } else {
+        close(msgsock);
+    }
+
 
     // Be very careful to close all sockets used, 
     // and exit any processes or threads which aren't used

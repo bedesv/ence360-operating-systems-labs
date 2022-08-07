@@ -27,10 +27,15 @@ int client_socket(char *hostname)
 
     /////////////////////////
 
-    //TODO: 
     // 1) initialise socket using 'socket'
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
     // 2) initialise 'their_addrinfo' and use 'getaddrinfo' to lookup the IP from host name
+    their_addrinfo.ai_family = AF_INET;
+    their_addrinfo.ai_socktype = SOCK_STREAM;
+    getaddrinfo(hostname, port, &their_addrinfo, &their_addr);
     // 3) connect to remote host using 'connect'
+    connect(sockfd, their_addr->ai_addr, their_addr->ai_addrlen);
+
 
     ///////////////////////////////
 
