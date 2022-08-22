@@ -17,7 +17,6 @@ int client_socket(char *hostname)
     struct addrinfo their_addrinfo; // server address info
     struct addrinfo *their_addr = NULL; // connector's address information  
     int sockfd;
-
     int n = snprintf(port, 20, "%d", SERVER_PORT); // Make a string out of the port number
     if ((n < 0) || (n >= 20))
     {
@@ -35,7 +34,6 @@ int client_socket(char *hostname)
     getaddrinfo(hostname, port, &their_addrinfo, &their_addr);
     // 3) connect to remote host using 'connect'
     connect(sockfd, their_addr->ai_addr, their_addr->ai_addrlen);
-
 
     ///////////////////////////////
 
