@@ -53,6 +53,7 @@ static MathFunc_t* const FUNCS[NUM_FUNCS] = {&sin, &gaussian, &chargeDecay};
 //Integrate using the trapezoid method. 
 void *integrateTrap(void *ptr)
 {
+    // Unpack the variables from the worker object
     Worker *worker = (Worker*)ptr;
 
     double rangeStart = worker->rangeStart;
@@ -71,6 +72,8 @@ void *integrateTrap(void *ptr)
 		area += dx * ( func(smallx) + func(bigx) ) / 2; //Would be more efficient to multiply area by dx once at the end. 
 	}
 
+    // Add to the total area variable accessed by all threads in this process
+    // Uses a mutex to stop multiple threads trying to write at the same time
     pthread_mutex_lock(worker->lock);
     (*worker->totalArea) += area;
     pthread_mutex_unlock(worker->lock);
@@ -104,15 +107,21 @@ void integrateWithChildProcess(double rangeStart, double rangeEnd, size_t numSte
 
     // If child code then integrate the trapezoid and print the result
     if (childPid == 0) {
+
+        // Create a mutex lock and a list of workers for this process
         pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
         Worker workers[NUM_THREADS];
+
+        // Variables for calculating what each thread should process
         double totalArea = 0;
         int stepsDone = 0;
         double threadRange = (rangeEnd - rangeStart) / NUM_THREADS;
 
         for (int i = 0; i < NUM_THREADS; i++) {
+            // Create a worker object and store it
             Worker *worker = &workers[i];
 
+            // Add area and mutex variables to the worker
             worker->totalArea = &totalArea;
             worker->lock = &lock;
 
@@ -133,9 +142,11 @@ void integrateWithChildProcess(double rangeStart, double rangeEnd, size_t numSte
 
             worker->func = FUNCS[funcId];
 
+            // Create the thread and tell it to integrate with the variables in the worker object
             pthread_create(&worker->thread, NULL, integrateTrap, (void*)worker);
         }
 
+        // Wait for all threads to be done
         for (int i = 0; i < NUM_THREADS; i++) {
             void *ret;
             Worker *worker = &workers[i];
